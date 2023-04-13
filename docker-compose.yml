@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  server:
+    build: ./
+    image: docker-socket
+    restart: unless-stopped
+    container_name: socket-server
+    networks:
+      - docker-net
+    command: nodemon /server/server/server-app
+    volumes:
+      - ./app:/server
+    env_file:
+      - .env
+    ports:
+      - ${SERVER_PORT}:3003
+  client:
+    image: docker-socket
+    restart: unless-stopped
+    container_name: socket-client
+    networks:
+      - docker-net
+    command: nodemon /server/client/client-app
+    volumes:
+      - ./app:/server
+    env_file:
+      - .env
+    ports:
+      - ${CLIENT_PORT}:80
+networks:
+  docker-net:
+    external: true
