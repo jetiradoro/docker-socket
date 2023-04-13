@@ -1,4 +1,5 @@
 require("dotenv").config({ path: "../" });
+const SocketController = require('./socket/controller')
 const port = process.env.SERVER_PORT;
 
 const { createServer } = require("http");
@@ -11,21 +12,7 @@ const io = new Server(httpServer, {
     },
 });
 
-io.on("connection", (socket) => {
-    console.log("Client connected: ", socket.id);
-    socket.on("disconnect", () => {
-        console.log("cliente desconectado:", socket.id);
-    })
-    
-
-    socket.on('client-message',(payload,callback)=>{
-        
-        callback({message:'success'})
-
-        socket.broadcast.emit('server-message',payload)
-    })
-   
-})
+io.on("connection", SocketController)
 
 
 httpServer.listen(port, () => {
